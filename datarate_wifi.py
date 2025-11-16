@@ -1,14 +1,14 @@
 import socket
 import time
 
-# 3. ESP32 시리얼 모니터에 표시된 IP 주소로 수정
-ESP32_IP = "192.168.219.181" 
+# 1. ESP32 AP 모드의 기본 IP는 '192.168.4.1' 입니다.
+ESP32_IP = "192.168.4.1" 
 ESP32_PORT = 8080
 
-TEST_DATA = b'x' * 1460 # 보낼 데이터
-BUFFER_SIZE = 4096     # 받을 버퍼
+TEST_DATA = b'x' * 1460 
+BUFFER_SIZE = 4096     
 
-print(f"Connecting to ESP32 at {ESP32_IP}:{ESP32_PORT} for combined test...")
+print(f"Connecting to ESP32 AP at {ESP32_IP}:{ESP32_PORT}...")
 
 try:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -35,19 +35,19 @@ try:
     total_received = 0
     startTimeRx = time.time()
 
-    s.settimeout(12.0) # ESP32가 10초간 보내므로 12초 타임아웃
+    s.settimeout(12.0) 
 
     while True:
         data = s.recv(BUFFER_SIZE)
         if not data:
-            break # ESP32가 연결을 끊음 (정상 종료)
+            break 
         total_received += len(data)
 
     durationRx = time.time() - startTimeRx
     print(f"Finished receiving {total_received} bytes in {durationRx:.2f}s.")
 
 except socket.timeout:
-    print("Socket timed out. ESP32 may not have sent data.")
+    print("Socket timed out.")
 except socket.error as e:
     print(f"Socket error: {e}")
 except Exception as e:
